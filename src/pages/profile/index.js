@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button, message } from "antd"
@@ -8,6 +8,7 @@ import { ProfileWrapper } from "./style";
 import { editUserInfo } from "@/services/user";
 
 function Profile() {
+    const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
     const { token, username, address, password } = useSelector(state => ({
@@ -17,24 +18,26 @@ function Profile() {
         password: state.User.UserIDInfo.password,
     }), shallowEqual)
 
-    const from = useRef()
+    const form = useRef()
     useEffect(() => {
         dispatch(getUserInfoAction(token))
     }, [dispatch, token, address, password])
     useEffect(() => {
-        from.current.setFieldsValue({
+        form.current.setFieldsValue({
             address: address,
         })
     }, [address])
 
     const onFinish = values => {
+        setLoading(true)
         editUserInfo(values, token).then(() => {
             dispatch(getUserInfoAction(token))
-            message.success('edit success!')
+            message.success('edit success!', 0.5, () => {
+                setLoading(false)
+            })
         }
         )
     }
-
 
     return (
         <ProfileWrapper>
@@ -48,7 +51,7 @@ function Profile() {
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 24 }}
                         onFinish={onFinish}
-                        ref={from}
+                        ref={form}
                     >
                         <Form.Item
                             label="Username"
@@ -115,7 +118,7 @@ function Profile() {
                                 span: 16,
                             }}
                         >
-                            <Button type="primary" htmlType="submit" >
+                            <Button type="primary" htmlType="submit" loading={loading}>
                                 Edit
                             </Button>
                         </Form.Item>
