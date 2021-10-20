@@ -42,4 +42,8 @@ export const itemsPerPageForCustomer = 6
 
 export const productTags = ['foods', 'electornics', 'daily necessities', 'clothing']
 
+export const numberOfDiscountShow = 6
 
+export const numberOfRecommendationShow = 6
+
+export const copyBase = process.env.NODE_ENV === 'development' ? 'localhost:3000' : '118.31.49.77'
