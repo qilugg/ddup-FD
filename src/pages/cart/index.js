@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useState } from "react";
 import { Table, Form, message, Input, Button, InputNumber, Modal } from "antd";
+import { CreditCardOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import copy from "copy-to-clipboard";
 
@@ -81,7 +82,7 @@ function Cart() {
         }
         const order = {
             products,
-            payerUsername: userName,
+            // payerUsername: userName,
             shippingAddress: values.address,
         }
         createOrder(order, token).then(res => {
@@ -144,7 +145,7 @@ function Cart() {
     function confirmPay() {
         confirmOrder({ orderNumber: orderNumber }, token)
             .then(() => {
-                message.success('pay success', 0.5, () => {
+                message.success('pay success', 1, () => {
                     dispatch(getProductsInfoAction())
                     setVisible(false)
                 })
@@ -156,7 +157,7 @@ function Cart() {
     function confirmDicountPay() {
         confirmOrder({ orderNumber: discountOrderNumber }, token)
             .then(() => {
-                message.success('pay success', 0.5, () => {
+                message.success('pay success', 1, () => {
                     setDiscountOrderNumber('')
                     dispatch(getProductsInfoAction())
                     setCheckVisible(false)
@@ -330,9 +331,18 @@ function Cart() {
                     footer={null}
                 >
                     <div style={{ textAlign: 'center' }}>
-                        <h3 style={{ color: 'red', fontSize: '24px' }}> {totalPrice} $ </h3>
+                        <h3 style={{ color: 'red', fontSize: '24px' }}> ${totalPrice}  </h3>
 
-                        <Button onClick={() => { confirmPay() }}> Pay </Button>
+                        <Button onClick={() => { confirmPay() }} icon={<CreditCardOutlined />} style={{ margin: '20px' }}> Pay </Button>
+                        <Button
+                            onClick={() => {
+                                copy(`${copyBase}/pay/${orderNumber}`)
+                                message.success('copy success, please share the link')
+                            }}
+                            style={{ margin: '20px' }}
+                        >
+                            Pay by others
+                        </Button>
                     </div>
                 </Modal>
                 <Modal
@@ -343,7 +353,7 @@ function Cart() {
                     footer={null}
                 >
                     <div style={{ textAlign: 'center' }}>
-                        <h3 style={{ color: 'red', fontSize: '24px' }}> {totalDiscountPrice} $ </h3>
+                        <h3 style={{ color: 'red', fontSize: '24px' }}> ${totalDiscountPrice} </h3>
                         <pre> please copy this link to your friends </pre>
                         <pre> {`${copyBase}/share/${discountOrderNumber}`} </pre>
                         <Button

@@ -43,19 +43,19 @@ function Detail({ match }) {
                     />)}
                 <div className='main-right'>
                     <Card title={<h2> {productInfo.name} </h2>}>
-                        <h3> Remaining: {productInfo.amount} </h3>
+                        <h3> Amount: {productInfo.amount} </h3>
                         <h3> Description: </h3>
-                        <p>{productInfo.description} 111111111
-                            11111111111111111111111111111111111111111111111111
-                            111111111111111111111
+                        <p>{productInfo.description} 
                         </p>
                         <h3> Price: {productInfo.price} </h3>
-                        <h3> DiscountPrice: {productInfo.discountPrice} </h3>
-                        <h3> Amount: {productInfo.amount} </h3>
+                        {
+                            productInfo.discountPrice === 0? null :
+                            <h3> DiscountPrice: { productInfo.discountPrice} </h3>
+                        }
                     </Card>
                     <div className='option'>
                         <Button size='large' onClick={() => { addIntoCart(productInfo.id) }}> add </Button>
-                        <Button disabled size='large'> join group </Button>
+                        {/* <Button disabled size='large'> </Button> */}
                     </div>
                 </div>
             </div>

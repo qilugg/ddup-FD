@@ -43,3 +43,18 @@ export function editProductItem(id, formData, token) {
         }
     })
 }
+
+export function getRecommendation() {
+    return request({
+        url: '/products/recommendation',
+    })
+}
+
+export function getCRecommendation(token) {
+    return request({
+        url: '/products/c-recommendation',
+        headers: {
+            'authorization': 'Bearer '+ token
+        }  
+    })
+}
